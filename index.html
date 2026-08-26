@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<title>License Plate Tracker Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root {
+    --primary-color: #3f51b5;
+    --secondary-color: #f4f6f8;
+    --accent-color: #ff5722;
+    --text-color: #333;
+    --card-bg: #ffffff;
+    --border-color: #ddd;
+    --highlight-color: #c8e6c9;
+    --font-family: 'Roboto Mono', monospace;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-family);
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+}
+
+header {
+    background: linear-gradient(
+        90deg,
+        var(--primary-color),
+        var(--accent-color)
+    );
+
+    color: white;
+    padding: 1.5rem 2rem;
+    text-align: center;
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.2rem;
+    letter-spacing: 1px;
+}
+
+main {
+    padding: 2rem;
+    max-width: 1300px;
+    margin: auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 1.8rem;
+
+    box-shadow:
+        0 6px 16px rgba(0,0,0,0.08);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+
+    overflow: visible !important;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 22px rgba(0,0,0,0.12);
+}
+
+/* =========================
+   SEARCH
+   ========================= */
+
+.search-card h2 {
+    margin: 0 0 1rem 0;
+    font-size: 1.6rem;
+    color: var(--primary-color);
+}
+
+.search-box {
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+
+    gap: 1rem;
+
+    margin: auto;
+    margin-top: 0.5rem;
+}
+
+.search-box input {
+    flex: 1;
+
+    padding: 0.9rem 1.2rem;
+
+    font-size: 1.1rem;
+
+    border-radius: 50px;
+
+    border:
+        2px solid var(--primary-color);
+
+    outline: none;
+
+    transition:
+        all 0.3s ease;
+}
+
+.search-box input:focus {
+    border-color: var(--accent-color);
+
+    box-shadow:
+        0 0 12px rgba(63,81,181,0.3);
+}
+
+.search-box button {
+    padding: 0.9rem 1.8rem;
+
+    font-size: 1.1rem;
+
+    font-weight: 700;
+
+    border-radius: 50px;
+
+    border: none;
+
+    background:
+        var(--primary-color);
+
+    color: white;
+
+    cursor: pointer;
+
+    transition:
+        all 0.3s ease;
+}
+
+.search-box button:hover {
+    background:
+        var(--accent-color);
+
+    transform:
+        scale(1.05);
+}
+
+.result-box {
+    margin-top: 1rem;
+
+    padding:
+        1rem 1.2rem;
+
+    border-radius: 10px;
+
+    border-left:
+        5px solid var(--primary-color);
+
+    background-color:
+        #f0f4ff;
+
+    font-weight: 700;
+
+    font-size: 1rem;
+
+    color: #333;
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,0.06);
+}
+
+/* =========================
+   STATISTICS
+   ========================= */
+
+.stats {
+    display: flex;
+
+    gap: 1.5rem;
+
+    flex-wrap: wrap;
+}
+
+.stats .stat {
+    flex: 1;
+
+    min-width: 180px;
+
+    background:
+        var(--card-bg);
+
+    padding:
+        1.2rem 1rem;
+
+    border-radius: 12px;
+
+    text-align: center;
+
+    box-shadow:
+        0 6px 16px rgba(0,0,0,0.08);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.stats .stat:hover {
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 10px 20px rgba(0,0,0,0.12);
+}
+
+.stats .stat h3 {
+    margin:
+        0.5rem 0;
+
+    font-size:
+        1.5rem;
+
+    color:
+        var(--primary-color);
+}
+
+/* =========================
+   GRAPH CONTAINERS
+   ========================= */
+
+.chart-container {
+    position: relative;
+
+    width: 100%;
+
+    height: 320px;
+
+    min-height: 320px;
+}
+
+/* IMPORTANT GRAPH FIX */
+
+.chart-container canvas {
+    display: block !important;
+
+    width: 100% !important;
+
+    height: 100% !important;
+
+    visibility: visible !important;
+
+    opacity: 1 !important;
+}
+
+/* =========================
+   TABLE
+   ========================= */
+
+table {
+    width: 100%;
+
+    border-collapse:
+        collapse;
+
+    margin-top:
+        1rem;
+
+    background:
+        var(--card-bg);
+
+    border-radius:
+        12px;
+
+    overflow:
+        hidden;
+
+    box-shadow:
+        0 6px 16px rgba(0,0,0,0.08);
+}
+
+th,
+td {
+    padding:
+        0.85rem 1rem;
+
+    border-bottom:
+        1px solid var(--border-color);
+
+    text-align:
+        left;
+}
+
+th {
+    background:
+        var(--primary-color);
+
+    color:
+        white;
+
+    text-transform:
+        uppercase;
+}
+
+tr:nth-child(even) {
+    background-color:
+        #f9f9f9;
+}
+
+.new-plate {
+    background-color:
+        var(--highlight-color) !important;
+
+    font-weight:
+        bold;
+
+    transition:
+        background 0.5s ease;
+}
+
+/* =========================
+   FOOTER
+   ========================= */
+
+footer {
+    text-align:
+        center;
+
+    padding:
+        1rem;
+
+    font-size:
+        0.9rem;
+
+    color:
+        #666;
+}
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 768px) {
+
+    .stats {
+        flex-direction:
+            column;
+    }
+
+    .search-box {
+        flex-direction:
+            column;
+    }
+
+    .search-box button {
+        width:
+            100%;
+    }
+
+    main {
+        padding:
+            1rem;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <h1>
+        License Plate Tracker Dashboard
+    </h1>
+
+</header>
+
+
+<main>
+
+    <!-- SEARCH VEHICLE -->
+
+    <div class="card search-card">
+
+        <h2>
+            Search Vehicle History
+        </h2>
+
+        <form id="search-form">
+
+            <div class="search-box">
+
+                <input
+                    type="text"
+                    id="plate-input"
+                    name="plate"
+                    placeholder="Enter license plate number..."
+                    required
+                >
+
+                <button type="submit">
+                    Search
+                </button>
+
+            </div>
+
+        </form>
+
+
+        <div id="result-container">
+
+            {% if result %}
+
+            <div class="result-box">
+                {{ result }}
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- STATISTICS -->
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <p>
+                Total Cars Detected
+            </p>
+
+            <h3>
+                {{ total }}
+            </h3>
+
+        </div>
+
+
+        <div class="stat">
+
+            <p>
+                New Cars
+            </p>
+
+            <h3>
+                {{ new }}
+            </h3>
+
+        </div>
+
+
+        <div class="stat">
+
+            <p>
+                Returning Cars
+            </p>
+
+            <h3>
+                {{ returning }}
+            </h3>
+
+        </div>
+
+
+        <div class="stat">
+
+            <p>
+                Predicted Peak Hour (Tomorrow)
+            </p>
+
+            <h3 id="peak-hour-display">
+                Loading...
+            </h3>
+
+        </div>
+
+    </div>
+
+
+    <!-- ANOMALY -->
+
+    <div
+        id="anomaly"
+        style="
+            display:none;
+            padding:1rem;
+            background-color:#ffeb3b;
+            border-radius:8px;
+            font-weight:bold;
+            margin-bottom:1rem;
+        "
+    ></div>
+
+
+    <!-- HOURLY TRAFFIC -->
+
+    <div class="card">
+
+        <h2>
+            Hourly Traffic
+        </h2>
+
+        <div class="chart-container">
+
+            <canvas id="hourlyChart"></canvas>
+
+        </div>
+
+    </div>
+
+
+    <!-- DAILY TRAFFIC -->
+
+    <div class="card">
+
+        <h2>
+            Daily Traffic (Last 7 Days)
+        </h2>
+
+        <div class="chart-container">
+
+            <canvas id="dailyChart"></canvas>
+
+        </div>
+
+    </div>
+
+
+    <!-- RECENT PLATES -->
+
+    <div class="card">
+
+        <h2>
+            Recently Detected Plates
+        </h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Car Number
+                    </th>
+
+                    <th>
+                        First Seen
+                    </th>
+
+                    <th>
+                        Last Seen
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for row in recent %}
+
+                <tr
+                    class="{% if row['First Seen'] == row['Last Seen'] %}new-plate{% endif %}"
+                >
+
+                    <td>
+                        {{ row['Car Number'] }}
+                    </td>
+
+                    <td>
+                        {{ row['First Seen'] }}
+                    </td>
+
+                    <td>
+                        {{ row['Last Seen'] }}
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</main>
+
+
+<footer>
+
+    &copy; 2026 License Plate Tracker.
+    All rights reserved.
+
+</footer>
+
+
+<!-- CHART.JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<!-- DATA FROM FLASK -->
+
+<script id="hourly-data" type="application/json">
+{{ hourly|tojson }}
+</script>
+
+
+<script id="daily-data" type="application/json">
+{{ daily|tojson }}
+</script>
+
+
+<script id="anomaly-message" type="application/json">
+{{ anomaly|tojson }}
+</script>
+
+
+<script>
+
+document.addEventListener(
+    'DOMContentLoaded',
+    function () {
+
+
+        /* =========================
+           GET DATA
+           ========================= */
+
+        const hourlyElement =
+            document.getElementById(
+                'hourly-data'
+            );
+
+        const dailyElement =
+            document.getElementById(
+                'daily-data'
+            );
+
+        const anomalyElement =
+            document.getElementById(
+                'anomaly-message'
+            );
+
+
+        const hourlyData =
+            JSON.parse(
+                hourlyElement.textContent
+            ) || {};
+
+
+        const dailyData =
+            JSON.parse(
+                dailyElement.textContent
+            ) || {};
+
+
+        const anomalyMessage =
+            JSON.parse(
+                anomalyElement.textContent
+            );
+
+
+        console.log(
+            "Hourly Data:",
+            hourlyData
+        );
+
+        console.log(
+            "Daily Data:",
+            dailyData
+        );
+
+
+        /* =========================
+           HOURLY CHART
+           ========================= */
+
+        try {
+
+            const hourlyCanvas =
+                document.getElementById(
+                    'hourlyChart'
+                );
+
+
+            const hourlyLabels =
+                Object.keys(
+                    hourlyData
+                ).map(
+                    hour =>
+                        `${String(hour).padStart(2, '0')}:00`
+                );
+
+
+            const hourlyValues =
+                Object.values(
+                    hourlyData
+                ).map(
+                    value =>
+                        Number(value)
+                );
+
+
+            new Chart(
+                hourlyCanvas,
+                {
+
+                    type: 'bar',
+
+                    data: {
+
+                        labels:
+                            hourlyLabels,
+
+                        datasets: [
+
+                            {
+
+                                label:
+                                    'Cars per Hour',
+
+                                data:
+                                    hourlyValues,
+
+                                backgroundColor:
+                                    'rgba(63, 81, 181, 0.6)',
+
+                                borderColor:
+                                    'rgba(63, 81, 181, 1)',
+
+                                borderWidth:
+                                    1
+
+                            }
+
+                        ]
+
+                    },
+
+
+                    options: {
+
+                        responsive:
+                            true,
+
+                        maintainAspectRatio:
+                            false,
+
+                        scales: {
+
+                            y: {
+
+                                beginAtZero:
+                                    true,
+
+                                ticks: {
+
+                                    precision:
+                                        0
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Hourly chart error:",
+                error
+            );
+
+        }
+
+
+        /* =========================
+           DAILY CHART
+           ========================= */
+
+        try {
+
+            const dailyCanvas =
+                document.getElementById(
+                    'dailyChart'
+                );
+
+
+            const dailyLabels =
+                Object.keys(
+                    dailyData
+                );
+
+
+            const dailyValues =
+                Object.values(
+                    dailyData
+                ).map(
+                    value =>
+                        Number(value)
+                );
+
+
+            new Chart(
+                dailyCanvas,
+                {
+
+                    type: 'bar',
+
+                    data: {
+
+                        labels:
+                            dailyLabels,
+
+                        datasets: [
+
+                            {
+
+                                label:
+                                    'Cars per Day',
+
+                                data:
+                                    dailyValues,
+
+                                backgroundColor:
+                                    'rgba(63, 81, 181, 0.6)',
+
+                                borderColor:
+                                    'rgba(63, 81, 181, 1)',
+
+                                borderWidth:
+                                    1
+
+                            }
+
+                        ]
+
+                    },
+
+
+                    options: {
+
+                        responsive:
+                            true,
+
+                        maintainAspectRatio:
+                            false,
+
+                        scales: {
+
+                            y: {
+
+                                beginAtZero:
+                                    true,
+
+                                ticks: {
+
+                                    precision:
+                                        0
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Daily chart error:",
+                error
+            );
+
+        }
+
+
+        /* =========================
+           ANOMALY MESSAGE
+           ========================= */
+
+        if (anomalyMessage) {
+
+            const anomalyDiv =
+                document.getElementById(
+                    'anomaly'
+                );
+
+            anomalyDiv.textContent =
+                anomalyMessage;
+
+            anomalyDiv.style.display =
+                'block';
+
+        }
+
+
+        /* =========================
+           PREDICTED PEAK HOUR
+           ========================= */
+
+        function loadPeakHour() {
+
+            fetch(
+                '/api/peak-hour'
+            )
+
+            .then(
+                response =>
+                    response.json()
+            )
+
+            .then(
+                data => {
+
+                    const element =
+                        document.getElementById(
+                            'peak-hour-display'
+                        );
+
+
+                    if (
+                        data.ok &&
+                        data.window
+                    ) {
+
+                        element.textContent =
+                            data.window;
+
+                    } else {
+
+                        element.textContent =
+                            data.message ||
+                            'Not enough data';
+
+                    }
+
+                }
+            )
+
+            .catch(
+                error => {
+
+                    console.error(
+                        "Peak hour error:",
+                        error
+                    );
+
+                    const element =
+                        document.getElementById(
+                            'peak-hour-display'
+                        );
+
+                    element.textContent =
+                        'Error';
+
+                }
+            );
+
+        }
+
+
+        loadPeakHour();
+
+
+        /* =========================
+           VEHICLE SEARCH
+           ========================= */
+
+        const searchForm =
+            document.getElementById(
+                'search-form'
+            );
+
+
+        const plateInput =
+            document.getElementById(
+                'plate-input'
+            );
+
+
+        const resultContainer =
+            document.getElementById(
+                'result-container'
+            );
+
+
+        if (searchForm) {
+
+            searchForm.addEventListener(
+                'submit',
+                function (event) {
+
+                    event.preventDefault();
+
+
+                    const plateNumber =
+                        plateInput.value.trim();
+
+
+                    if (!plateNumber) {
+                        return;
+                    }
+
+
+                    resultContainer.innerHTML =
+                        '<div class="result-box">Searching...</div>';
+
+
+                    fetch(
+                        '/api/search',
+                        {
+
+                            method:
+                                'POST',
+
+                            headers: {
+
+                                'Content-Type':
+                                    'application/json'
+
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    {
+                                        plate:
+                                            plateNumber
+                                    }
+                                )
+
+                        }
+                    )
+
+                    .then(
+                        response =>
+                            response.json()
+                    )
+
+                    .then(
+                        data => {
+
+                            if (
+                                data.success
+                            ) {
+
+                                resultContainer.innerHTML = `
+                                    <div class="result-box">
+                                        ${data.result || 'No result found'}
+                                    </div>
+                                `;
+
+                            } else {
+
+                                resultContainer.innerHTML = `
+                                    <div class="result-box">
+                                        Error: ${data.error}
+                                    </div>
+                                `;
+
+                            }
+
+                        }
+                    )
+
+                    .catch(
+                        error => {
+
+                            resultContainer.innerHTML = `
+                                <div class="result-box">
+                                    Network error: ${error}
+                                </div>
+                            `;
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
