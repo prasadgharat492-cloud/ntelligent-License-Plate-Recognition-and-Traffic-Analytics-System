@@ -1,8 +1,8 @@
-flask
-flask-cors
-pandas
-numpy
-scikit-learn
-opencv-python
+Flask
+gunicorn
+opencv-python-headless
 easyocr
+pandas
 openpyxl
+torch
+torchvision
